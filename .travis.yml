@@ -1,0 +1,19 @@
+language: julia
+os:
+  - linux
+  - osx
+julia:
+  - 0.6
+notifications:
+  email: false
+git:
+  depth: 99999999
+matrix:
+  allow_failures:
+  - julia: 0.6
+## uncomment the following lines to override the default test script
+#script:
+#  - julia -e 'Pkg.clone(pwd()); Pkg.build("Modof"); Pkg.test("Modof"; coverage=true)'
+after_success:
+  - julia -e 'Pkg.add("Documenter")'
+  - julia -e 'cd(Pkg.dir("Modof.jl")); include(joinpath("docs", "make.jl"))'
