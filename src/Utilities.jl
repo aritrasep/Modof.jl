@@ -65,7 +65,7 @@ end
 
  Compute objective function values of a `MOOSolution` of a Multi Objective Optimization Instance
 """
-function compute_objective_function_value!{T<:MOOInstance, S<:MOOSolution}(solution::S, instance::T)
+function compute_objective_function_value!(solution::S, instance::T) where {T<:MOOInstance, S<:MOOSolution}
     @inbounds for i in 1:size(instance.c)[1]
         if length(solution.obj_vals) >= i
             solution.obj_vals[i] = sum(instance.c[i, :] .* solution.vars)
@@ -80,7 +80,7 @@ end
     
  Compute objective function values of a `vector{MOOSolution}` of a Multi Objective Optimization Instance
 """
-function compute_objective_function_value!{T<:MOOInstance, S<:MOOSolution}(solutions::Vector{S}, instance::T)
+function compute_objective_function_value!(solutions::Vector{S}, instance::T) where {T<:MOOInstance, S<:MOOSolution}
     @inbounds for i in 1:length(solutions)
         compute_objective_function_value!(solutions[i], instance)
     end
@@ -91,7 +91,7 @@ end
 
  Compute objective function values of a `BOOSolution` of a Bi Objective Optimization Instance
 """
-function compute_objective_function_value!{T<:BOOInstance, S<:BOOSolution}(solution::S, instance::T)
+function compute_objective_function_value!(solution::S, instance::T) where {T<:BOOInstance, S<:BOOSolution}
     solution.obj_val1, solution.obj_val2 = sum(instance.c1 .* solution.vars), sum(instance.c2 .* solution.vars)
 end
 
@@ -100,7 +100,7 @@ end
 
  Compute objective function values of a `vector{BOOSolution}` of a Bi Objective Optimization Instance
 """
-function compute_objective_function_value!{T<:BOOInstance, S<:BOOSolution}(solutions::Vector{S}, instance::T)
+function compute_objective_function_value!(solutions::Vector{S}, instance::T) where {T<:BOOInstance, S<:BOOSolution}
     @inbounds for i in 1:length(solutions)
         compute_objective_function_value!(solutions[i], instance)
     end
@@ -197,7 +197,7 @@ end
     
  Checks whether points `point1` and `point2` dominate one another. 
 """
-function check_dominance{T<:Number}(point1::Vector{T}, point2::Vector{T})
+function check_dominance(point1::Vector{T}, point2::Vector{T}) where {T<:Number}
     if point1 == point2
         return (false, true)
     end
@@ -221,7 +221,7 @@ end
 
  Select nondominated points for both Biobjective and Multiobjective Programs. 
 """
-function select_non_dom_sols{T<:Number}(solutions::Array{T,2})
+function select_non_dom_sols(solutions::Array{T,2}) where {T<:Number}
     dom_inds = fill(false, size(solutions)[1])
     @inbounds for i in 1:size(solutions)[1]
         if dom_inds[i]
@@ -297,8 +297,8 @@ end
     
  Select unique nondominated points for both Biobjective and Multiobjective Programs. 
 """
-function select_unique_sols{T<:Number}(solutions::Array{T, 2})
-    unique(solutions, 1)
+function select_unique_sols(solutions::Array{T, 2}) where {T<:Number}
+    unique(solutions; dims=1)
 end
 
 """
@@ -354,7 +354,7 @@ end
     
  Sort nondominated `solutions` for both Biobjective and Multiobjective Programs based on `index` objective. 
 """
-function sort_non_dom_sols{T<:Number}(solutions::Array{T,2}, index::Int64=1)
+function sort_non_dom_sols(solutions::Array{T,2}, index::Int64=1) where {T<:Number}
     if index == 1
         return sortrows(solutions)
     else
@@ -418,7 +418,7 @@ end
     
  Select and Sort nondominated `solutions` for both Biobjective and Multiobjective Programs. 
 """
-function select_and_sort_non_dom_sols{T<:Number}(solutions::Array{T,2}, index::Int64=1)
+function select_and_sort_non_dom_sols(solutions::Array{T,2}, index::Int64=1) where {T<:Number}
     sort_non_dom_sols(select_non_dom_sols(solutions), index)
 end
 
@@ -485,7 +485,7 @@ end
  Write nondominated solutions of a `Vector{BOPSolution}` or a `Vector{MOPSolution}` and save it to `filename`.
 """
 function write_nondominated_sols(non_dom_sols::Union{Vector{MOPSolution}, Vector{BOPSolution}}, filename::String)
-    data = Array{Float64, 2}(length(non_dom_sols), length(non_dom_sols[1].vars))
+    data = Array{Float64, 2}(undef, length(non_dom_sols), length(non_dom_sols[1].vars))
     @inbounds for i in 1:length(non_dom_sols)
         data[i, :] = non_dom_sols[i].vars
     end
@@ -496,7 +496,7 @@ end
 # Normalizing a Frontier                                            #
 #####################################################################
 
-@inbounds function normalize_frontier{T<:Number}(non_dom_sols::Array{T, 2}, true_non_dom_sols::Array{T, 2})
+@inbounds function normalize_frontier(non_dom_sols::Array{T, 2}, true_non_dom_sols::Array{T, 2}) where {T<:Number}
     tmp = copy(non_dom_sols)
     num_i = [ minimum(true_non_dom_sols[:, i]) for i in 1:size(tmp)[2] ]
     den_i = [ maximum(true_non_dom_sols[:, i]) - minimum(true_non_dom_sols[:, i]) for i in 1:size(tmp)[2] ]
@@ -515,7 +515,7 @@ end
     
  Returns the `Ideal Point` of the nondominated frontier `non_dom_sols`.
 """
-function compute_ideal_point{T<:Number}(non_dom_sols::Array{T, 2})
+function compute_ideal_point(non_dom_sols::Array{T, 2}) where {T<:Number}
     [ minimum(non_dom_sols[:, i]) for i in 1:size(non_dom_sols)[2] ]
 end
 
@@ -538,7 +538,7 @@ end
 
  Returns the closest point in the nondominated frontier `non_dom_sols` from its Ideal Point `ideal_point`.
 """
-function compute_closest_point_to_the_ideal_point{T<:Number}(non_dom_sols::Array{T, 2}, ideal_point::Vector{T}, return_pos::Bool=false)
+function compute_closest_point_to_the_ideal_point(non_dom_sols::Array{T, 2}, ideal_point::Vector{T}, return_pos::Bool=false) where {T<:Number}
     best_pt_dist = Inf
     best_pt = Float64[]
     best_pt_pos = 0
@@ -566,7 +566,7 @@ end
 
  Returns the closest point in the nondominated frontier `non_dom_sols` from its Ideal Point `ideal_point`.
 """
-function compute_closest_point_to_the_ideal_point{T<:Number}(non_dom_sols::Union{Vector{MOPSolution}, Vector{BOPSolution}}, ideal_point::Vector{T})
+function compute_closest_point_to_the_ideal_point(non_dom_sols::Union{Vector{MOPSolution}, Vector{BOPSolution}}, ideal_point::Vector{T}) where {T<:Number}
     non_dom_sols[compute_closest_point_to_the_ideal_point(wrap_sols_into_array(non_dom_sols), ideal_point, true)]
 end
 
@@ -575,7 +575,7 @@ end
 
  Returns the closest point in the nondominated frontier `non_dom_sols` from its Ideal Point.
 """
-function compute_closest_point_to_the_ideal_point{T<:Number}(non_dom_sols::Array{T, 2})
+function compute_closest_point_to_the_ideal_point(non_dom_sols::Array{T, 2}) where {T<:Number}
     compute_closest_point_to_the_ideal_point(non_dom_sols, compute_ideal_point(non_dom_sols))
 end
 
@@ -597,7 +597,7 @@ end
     
  Returns the `Nadir Point` of the nondominated frontier `non_dom_sols`.
 """
-function compute_nadir_point{T<:Number}(non_dom_sols::Array{T, 2})
+function compute_nadir_point(non_dom_sols::Array{T, 2}) where {T<:Number}
     [ maximum(non_dom_sols[:, i]) for i in 1:size(non_dom_sols)[2] ]
 end
 
@@ -620,7 +620,7 @@ end
 
  Returns the farthest point in the nondominated frontier `non_dom_sols` from its Nadir Point `nadir_point`.
 """
-function compute_farthest_point_to_the_nadir_point{T<:Number}(non_dom_sols::Array{T, 2}, nadir_point::Vector{T}, return_pos::Bool=false)
+function compute_farthest_point_to_the_nadir_point(non_dom_sols::Array{T, 2}, nadir_point::Vector{T}, return_pos::Bool=false) where {T<:Number}
     best_pt_dist = -Inf
     best_pt = Float64[]
     best_pt_pos = 0
@@ -648,7 +648,7 @@ end
 
  Returns the farthest point in the nondominated frontier `non_dom_sols` from its Nadir Point `nadir_point`.
 """
-function compute_farthest_point_to_the_nadir_point{T<:Number}(non_dom_sols::Union{Vector{MOPSolution}, Vector{BOPSolution}}, nadir_point::Vector{T})
+function compute_farthest_point_to_the_nadir_point(non_dom_sols::Union{Vector{MOPSolution}, Vector{BOPSolution}}, nadir_point::Vector{T}) where {T<:Number}
     non_dom_sols[compute_farthest_point_to_the_nadir_point(wrap_sols_into_array(non_dom_sols), nadir_point, true)]
 end
 
@@ -657,7 +657,7 @@ end
     
  Returns the farthest point in the nondominated frontier `non_dom_sols` from its Nadir Point.
 """
-function compute_farthest_point_to_the_nadir_point{T<:Number}(non_dom_sols::Array{T, 2})
+function compute_farthest_point_to_the_nadir_point(non_dom_sols::Array{T, 2}) where {T<:Number}
     compute_farthest_point_to_the_nadir_point(non_dom_sols, compute_nadir_point(non_dom_sols))
 end
 

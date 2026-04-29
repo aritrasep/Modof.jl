@@ -12,27 +12,22 @@
 
 ## Dependencies: ##
 
-1. [Julia v0.6.0](https://julialang.org/downloads/)
+1. [Julia v1.10 or newer](https://julialang.org/downloads/) (tested with Julia v1.12)
 
 ## Installation ##
 
-Once, Julia v0.6.0 has been properly installed, the following instructions in a **Julia** terminal will install **Modof.jl** on the local machine:
+Once Julia has been properly installed, the following instructions in a **Julia** terminal will install **Modof.jl** from a local checkout:
 
 ```julia
-Pkg.clone("https://github.com/aritrasep/Modof.jl")
-Pkg.build("Modof")
+import Pkg
+Pkg.develop(path="/path/to/Modof.jl")
 ```
 
-In case `Pkg.build("Modof")` gives you an error on Linux, you may need to install the GMP library headers. For example, on Ubuntu/Debian and similar, give the following command from a terminal:
+To install directly from GitHub, use:
 
-```
-$ sudo apt-get install libgmp-dev
-```
-
-After that, restart the installation of the package with:
-
-```
-Pkg.build("Modof")
+```julia
+import Pkg
+Pkg.add(url="https://github.com/aritrasep/Modof.jl")
 ```
 
 ## Contents: ##

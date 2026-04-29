@@ -56,9 +56,9 @@ end
 
 function MOIPInstance(sparse::Bool=true)
     if sparse
-        return MOIPInstance(Float64[], Float64[], Array{Float64}(1, 1), spzeros(1,1), Float64[], Float64[])
+        return MOIPInstance(Float64[], Float64[], Array{Float64}(undef, 1, 1), spzeros(1,1), Float64[], Float64[])
     else
-        return MOIPInstance(Float64[], Float64[], Array{Float64}(1, 1), Array{Float64}(1, 1), Float64[], Float64[])
+        return MOIPInstance(Float64[], Float64[], Array{Float64}(undef, 1, 1), Array{Float64}(undef, 1, 1), Float64[], Float64[])
     end
 end
 
@@ -80,9 +80,9 @@ end
 
 function MOBPInstance(sparse::Bool=true)
     if sparse
-        return MOBPInstance(Array{Float64}(1, 1), spzeros(1,1), Float64[], Float64[])
+        return MOBPInstance(Array{Float64}(undef, 1, 1), spzeros(1,1), Float64[], Float64[])
     else
-        return MOBPInstance(Array{Float64}(1, 1), Array{Float64}(1, 1), Float64[], Float64[])
+        return MOBPInstance(Array{Float64}(undef, 1, 1), Array{Float64}(undef, 1, 1), Float64[], Float64[])
     end
 end
 
@@ -107,9 +107,9 @@ end
 
 function MOLPInstance(sparse::Bool=true)
     if sparse
-        return MOLPInstance(Float64[], Float64[], Array{Float64}(1, 1), spzeros(1,1), Float64[], Float64[], 1.0e-9)
+        return MOLPInstance(Float64[], Float64[], Array{Float64}(undef, 1, 1), spzeros(1,1), Float64[], Float64[], 1.0e-9)
     else
-        return MOLPInstance(Float64[], Float64[], Array{Float64}(1, 1), Array{Float64}(1, 1), Float64[], Float64[], 1.0e-9)
+        return MOLPInstance(Float64[], Float64[], Array{Float64}(undef, 1, 1), Array{Float64}(undef, 1, 1), Float64[], Float64[], 1.0e-9)
     end
 end
 
@@ -135,9 +135,9 @@ end
 
 function MOMILPInstance(sparse::Bool=true)
     if sparse
-        return MOMILPInstance(Symbol[], Float64[], Float64[], Array{Float64}(1, 1), spzeros(1,1), Float64[], Float64[], 1.0e-9)
+        return MOMILPInstance(Symbol[], Float64[], Float64[], Array{Float64}(undef, 1, 1), spzeros(1,1), Float64[], Float64[], 1.0e-9)
     else
-        return MOMILPInstance(Symbol[], Float64[], Float64[], Array{Float64}(1, 1), Array{Float64}(1, 1), Float64[], Float64[], 1.0e-9)
+        return MOMILPInstance(Symbol[], Float64[], Float64[], Array{Float64}(undef, 1, 1), Array{Float64}(undef, 1, 1), Float64[], Float64[], 1.0e-9)
     end
 end
 
@@ -163,9 +163,9 @@ end
 
 function MOMBLPInstance(sparse::Bool=true)
     if sparse
-        return MOMBLPInstance(Symbol[], Float64[], Float64[], Array{Float64}(1, 1), spzeros(1,1), Float64[], Float64[], 1.0e-9)
+        return MOMBLPInstance(Symbol[], Float64[], Float64[], Array{Float64}(undef, 1, 1), spzeros(1,1), Float64[], Float64[], 1.0e-9)
     else
-        return MOMBLPInstance(Symbol[], Float64[], Float64[], Array{Float64}(1, 1), Array{Float64}(1, 1), Float64[], Float64[], 1.0e-9)
+        return MOMBLPInstance(Symbol[], Float64[], Float64[], Array{Float64}(undef, 1, 1), Array{Float64}(undef, 1, 1), Float64[], Float64[], 1.0e-9)
     end
 end
 
@@ -200,7 +200,7 @@ function BOIPInstance(sparse::Bool=true)
     if sparse
         return BOIPInstance(Float64[], Float64[], Float64[], Float64[], spzeros(1,1), Float64[], Float64[])
     else
-        return BOIPInstance(Float64[], Float64[], Float64[], Float64[], Array{Float64}(1, 1), Float64[], Float64[])
+        return BOIPInstance(Float64[], Float64[], Float64[], Float64[], Array{Float64}(undef, 1, 1), Float64[], Float64[])
     end
 end
 
@@ -225,7 +225,7 @@ function BOBPInstance(sparse::Bool=true)
     if sparse
         return BOBPInstance(Float64[], Float64[], spzeros(1,1), Float64[], Float64[])
     else
-        return BOBPInstance(Float64[], Float64[], Array{Float64}(1, 1), Float64[], Float64[])
+        return BOBPInstance(Float64[], Float64[], Array{Float64}(undef, 1, 1), Float64[], Float64[])
     end
 end
 
@@ -253,7 +253,7 @@ function BOLPInstance(sparse::Bool=true)
     if sparse
         return BOLPInstance(Float64[], Float64[], Float64[], Float64[], spzeros(1,1), Float64[], Float64[], 1.0e-9)
     else
-        return BOLPInstance(Float64[], Float64[], Float64[], Float64[], Array{Float64}(1, 1), Float64[], Float64[], 1.0e-9)
+        return BOLPInstance(Float64[], Float64[], Float64[], Float64[], Array{Float64}(undef, 1, 1), Float64[], Float64[], 1.0e-9)
     end
 end
 
@@ -282,7 +282,7 @@ function BOMILPInstance(sparse::Bool=true)
     if sparse
         return BOMILPInstance(Symbol[], Float64[], Float64[], Float64[], Float64[], spzeros(1,1), Float64[], Float64[], 1.0e-9)
     else
-        return BOMILPInstance(Symbol[], Float64[], Float64[], Float64[], Float64[], Array{Float64}(1, 1), Float64[], Float64[], 1.0e-9)
+        return BOMILPInstance(Symbol[], Float64[], Float64[], Float64[], Float64[], Array{Float64}(undef, 1, 1), Float64[], Float64[], 1.0e-9)
     end
 end
 
@@ -311,7 +311,7 @@ function BOMBLPInstance(sparse::Bool=true)
     if sparse
         return BOMBLPInstance(Symbol[], Float64[], Float64[], Float64[], Float64[], spzeros(1,1), Float64[], Float64[], 1.0e-9)
     else
-        return BOMBLPInstance(Symbol[], Float64[], Float64[], Float64[], Float64[], Array{Float64}(1, 1), Float64[], Float64[], 1.0e-9)
+        return BOMBLPInstance(Symbol[], Float64[], Float64[], Float64[], Float64[], Array{Float64}(undef, 1, 1), Float64[], Float64[], 1.0e-9)
     end
 end
 

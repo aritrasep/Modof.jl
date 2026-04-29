@@ -150,7 +150,7 @@ end
             coeffs = Float64[]
             tmp = split(lines_in_file[i])
             for j in 2+m+1:2+m+n
-                push!(coeffs, float(tmp[j]))
+                push!(coeffs, parse(Float64, tmp[j]))
             end
             tmp2 = BOPSolution(vars=coeffs)
             compute_objective_function_value!(tmp2, instance)

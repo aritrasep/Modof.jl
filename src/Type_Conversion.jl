@@ -148,9 +148,10 @@ function convert_ip_into_bp(instance::Union{BOIPInstance, BOMILPInstance}, ub::F
             if typeof(instance) == BOMILPInstance && instance.var_types[i] == :Cont
                 continue
             end    
-            num = @match instance.v_ub[i] begin
-                Inf => ceil(Int64, log(ub + 1.0) / log(2.0))
-                _ => ceil(Int64, log(instance.v_ub[i] + 1.0) / log(2.0))
+            num = if isinf(instance.v_ub[i])
+                ceil(Int64, log(ub + 1.0) / log(2.0))
+            else
+                ceil(Int64, log(instance.v_ub[i] + 1.0) / log(2.0))
             end
             push!(pos, [current_pos:(current_pos + num - 1)...])
             tmp1 = instance.c1[i]
@@ -209,9 +210,10 @@ function convert_ip_into_bp(instance::Union{MOIPInstance, MOMILPInstance}, ub::F
             if typeof(instance) == MOMILPInstance && instance.var_types[i] == :Cont
                 continue
             end    
-            num = @match instance.v_ub[i] begin
-                Inf => ceil(Int64, log(ub + 1.0) / log(2.0))
-                _ => ceil(Int64, log(instance.v_ub[i] + 1.0) / log(2.0))
+            num = if isinf(instance.v_ub[i])
+                ceil(Int64, log(ub + 1.0) / log(2.0))
+            else
+                ceil(Int64, log(instance.v_ub[i] + 1.0) / log(2.0))
             end
             push!(pos, [current_pos:(current_pos + num - 1)...])
             tmp1 = instance.c[:, i]

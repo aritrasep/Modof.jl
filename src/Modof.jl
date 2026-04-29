@@ -28,7 +28,21 @@
 
 module Modof
 
-using JuMP, MathProgBase, GLPKMathProgInterface, Match
+using DelimitedFiles
+using Distributed
+using GLPK
+using JuMP
+using LinearAlgebra
+using Match
+using MathOptInterface
+using SparseArrays
+
+const MOI = MathOptInterface
+
+findin(collection, values) = findall(x -> x in values, collection)
+findin(collection, value::Number) = findall(==(value), collection)
+findn(collection) = findall(!iszero, collection)
+sortrows(values::AbstractMatrix) = values[sortperm([Tuple(row) for row in eachrow(values)]), :]
 
 include("ModoModel.jl")
 include("Types.jl")
@@ -42,7 +56,7 @@ export BOOInstance, BOPInstance, BOMInstance, BOLPInstance, BOBPInstance, BOIPIn
 export MOOSolution, MOPSolution, BOOSolution, BOPSolution, BOMSolution
 export OOESInstance, OOESSolution
 
-export ModoModel, objective!, read_an_instance_from_a_jump_model, read_an_instance_from_a_lp_or_a_mps_file, read_a_boo_instance_from_a_mathprogbase_model, read_a_moo_instance_from_a_mathprogbase_model
+export ModoModel, objective!, read_an_instance_from_a_jump_model, read_an_instance_from_a_lp_or_a_mps_file
 export lprelaxation, convert_ip_into_bp, convert_bp_sol_into_ip_sol
 export wrap_sols_into_array, compute_objective_function_value!, check_feasibility
 export check_dominance, select_non_dom_sols, select_unique_sols, sort_non_dom_sols, select_and_sort_non_dom_sols, write_nondominated_frontier, write_nondominated_sols, normalize_frontier, compute_ideal_point, compute_closest_point_to_the_ideal_point, compute_nadir_point, compute_farthest_point_to_the_nadir_point
